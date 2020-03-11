@@ -1,0 +1,48 @@
+import { Component } from '@angular/core';
+import { FindTaskerService } from 'src/app/find-tasker/find-tasker-service.service';
+
+@Component({
+  selector: 'taskina-education',
+  templateUrl: 'education.component.html',
+  styleUrls: ['education.component.scss']
+})
+export class EducationComponent {
+
+  public education: any = [];
+  public result: any = [];
+  public startindex: any;
+  public noOfitems: number = 3;
+  public showloader: boolean = false;
+
+  constructor(private profile:FindTaskerService){}
+
+  ngOnInit() {
+    this.profile.getEducation(null).subscribe(res=> {
+      this.result = res;
+    });
+    this.startindex = 0;
+    this.result.map((item, i) => {
+      if (i == this.startindex || i < this.startindex + this.noOfitems) {
+        this.education.push(item);
+      }
+    });
+  }
+
+  paginator(event) {
+    let pageResult = [];
+    this.startindex = event.first;
+
+    this.result.map((item, i) => {
+      if (i >= this.startindex && i < this.startindex + this.noOfitems) {
+        pageResult.push(item);
+      }
+    });
+    this.education = [];
+    this.education = pageResult;
+  }
+}
+.button-primary:hover, .button-primary-border:hover {
+    background: #21c1f1;
+    box-shadow: 0 2px 10px 1px rgba(57, 73, 76, 0.4), 0 1px 2px rgba(57, 73, 76, 0.25);
+    border: 0;
+}
